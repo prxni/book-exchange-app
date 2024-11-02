@@ -1,17 +1,23 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link,useNavigate} from "react-router-dom";
 import { useFirebase } from "../context/Firebase.jsx"; 
 
 export default function Login() {
   const firebase = useFirebase();
   const [errorMsg, setErrorMsg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
+  const navigate=useNavigate()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  useEffect(()=>{
+    if(!firebase.isLoading && firebase.isLoggedIn){
+        navigate("/home")
+    }
+  },[firebase,navigate,firebase.isLoading])
+
   const handleLogin = (e) => {
-    e.preventDefault(); 
+    e.preventDefault()
 
     setIsLoading(true);
     firebase

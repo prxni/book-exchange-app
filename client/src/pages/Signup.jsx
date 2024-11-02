@@ -1,15 +1,20 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState,useEffect} from "react";
+import { Link,useNavigate} from "react-router-dom";
 import { useFirebase } from "../context/Firebase.jsx"; 
-import Login from "./Login.jsx";
 
 export default function Signup() {
   const firebase = useFirebase();
   const [errorMsg, setErrorMsg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
+  const navigate=useNavigate()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(()=>{
+    if(!firebase.isLoading && firebase.isLoggedIn){
+        navigate("/home")
+    }
+  },[firebase,navigate,firebase.isLoading])
 
   const handleLogin = (e) => {
     e.preventDefault(); 
@@ -64,7 +69,7 @@ export default function Signup() {
               type="submit"
               disabled={isLoading}
             >
-              {isLoading ? "Logging in..." : "Login"}
+              {isLoading ? "Signing up..." : "Sign up"}
             </button>
           </form>
 
@@ -72,9 +77,9 @@ export default function Signup() {
             <span>Already have an account?</span>
             <Link
               className="group border-b-2 border-transparent font-medium hover:border-teal-300 duration-200"
-              to="/login"
+              to="/"
             >
-              Sign Up
+              Log In
               <span className="material-symbols-outlined relative top-[2px] font-semibold group-hover:text-teal-300 text-base duration-200">
                 open_in_new
               </span>
