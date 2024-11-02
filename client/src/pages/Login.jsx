@@ -33,60 +33,16 @@ export default function Login() {
   };
 
   return (
-    <div className="bg-gradient-to-r from-purple-100 via-cyan-100 to-purple-100 flex flex-col font-poppins absolute justify-center items-center h-svh w-full border-2">
-      {!isLoading && (
-        <div className="flex flex-col items-center hover:shadow-md duration-150 bg-white hover:shadow-teal-300 gap-5 text-[20px] justify-center py-9 text-center border-blue-200 border-2 shadow-teal-300 shadow-sm rounded-xl w-[30%] h-fit ">
-          <h1 className="text-3xl font-semibold select-none ">Login</h1>
-          <div className="w-[70%] min-h-6">
-            {errorMsg && (
-              <div className="flex justify-center items-center gap-x-1 text-rose-500 border-rose-400 border-2 rounded w-full">
-                <span className="material-symbols-outlined inline text-sm select-none">error</span>
-                <p className="inline text-sm">{errorMsg}</p>
-              </div>
-            )}
-          </div>
-          <form onSubmit={handleLogin} className="flex flex-col items-center gap-3 w-[70%]">
-            <input
-              autoFocus
-              autoComplete="off"
-              spellCheck="false"
-              className="text-lg border-b-2 w-[80%] outline-none focus-within:border-teal-300 hover:border-teal-300 bg-transparent duration-150"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
-              type="password"
-              autoComplete="off"
-              spellCheck="false"
-              className="text-lg border-b-2 w-[80%] outline-none focus-within:border-teal-300 hover:border-teal-300 bg-transparent duration-150"
-              value={password}
-              placeholder="Password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <button
-              className="cursor-default text-base font-semibold border-2 mt-5 mb-2 rounded-lg hover:bg-slate-800 duration-150 px-5 py-1 bg-black text-white"
-              type="submit"
-              disabled={isLoading}
-            >
-              {isLoading ? "Logging in..." : "Login"}
-            </button>
-          </form>
-
-          <p className="text-sm space-x-1">
-            <span>Don&apos;t have an account?</span>
-            <Link
-              className="group border-b-2 border-transparent font-medium hover:border-teal-300 duration-200"
-              to="/signup"
-            >
-              Sign Up
-              <span className="material-symbols-outlined relative top-[2px] font-semibold group-hover:text-teal-300 text-base duration-200">
-                open_in_new
-              </span>
-            </Link>
-          </p>
-        </div>
-      )}
+    <div className="bg-[url('./assets/login.png')] bg-cover opacity-80 h-svh w-full">
+      <div className="h-full absolute right-0 flex flex-col justify-center w-[40%] px-10">
+        <form onSubmit={handleLogin} className="bg-[#DED8D0] w-[85%] rounded-lg flex flex-col font-Poppins items-center justify-center gap-4 p-7">
+          <h className="text-3xl font-semibold mb-3">LOGIN</h>
+          <input type="text" className="bg-[#DED8D0] border-b-2 outline-none w-72 text-xl my-1" placeholder="Email" autoFocus></input>
+          <input type="password" className="bg-[#DED8D0] border-b-2 outline-none w-72 text-xl my-1" placeholder="Password"></input>
+          <button onClick={handleLogin} className="mt-3 mb-1 text-xl font-medium hover:bg-[#5E463B] bg-[#B2A59B] px-3 py-1 rounded-lg hover:text-[#DED8D0] border-2 "> Login </button>
+          <p>New user? <Link className="underline" to="/signup">Signup</Link></p>
+        </form>
+      </div>
     </div>
   );
 }
