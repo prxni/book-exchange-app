@@ -2,6 +2,7 @@ import { createContext, useContext ,useEffect,useState } from "react";
 import { initializeApp} from "firebase/app";
 import {getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,onAuthStateChanged} from "firebase/auth";
 import {set,ref,getDatabase} from "firebase/database";
+import cloudinary from "./cloudinaryConfig"
 
 
 const firebaseConfig ={
