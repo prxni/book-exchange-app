@@ -1,20 +1,17 @@
 import { Link,useNavigate} from "react-router-dom";
-import { useEffect, useState } from "react";
-import { useFirebase } from "../context/Firebase.jsx"
-
+import { useEffect, useState ,useContext} from "react";
+import { AuthContext } from "../Auth/AuthContext";
 export default function Home()
 {
-    const navigate=useNavigate()
-    const firebase = useFirebase();
-    useEffect(()=>{
-        if(!firebase.isLoggedIn){
-            navigate("/")
-        }
-      },[firebase,navigate])
+    const { authorize, user, isLoading } = useContext(AuthContext)
+
+    useEffect(() => {
+        authorize()
+    },[])
 
     return(
         <div>
-            hi
+            {!isLoading && user && <span>hi</span>}
         </div>
     )
 }
