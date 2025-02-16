@@ -6,7 +6,7 @@ import { jwtDecode } from "jwt-decode";
 const baseURL = 'http://localhost:3000/api/';
 export const axiosJWT = axios.create({baseURL})
 
-axios.interceptors.request.use(async (config) => {
+axiosJWT.interceptors.request.use(async (config) => {
     const date = new Date();
     const token = getCookie('auth'); // Fetches the auth cookie
 

@@ -17,6 +17,11 @@ const User = new mongoose.Schema({
         type: String,
         trim: true
     },
+    profile_pic:
+    {
+        type:String,
+        trim:true
+    },
 
     bio: String,
     dob: Date,

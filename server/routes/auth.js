@@ -14,7 +14,8 @@ router.post('/signup',encrypt,async(req,res)=>{
         email: req.body.email || "", 
         dob: req.body.dob || "", 
         phone: req.body.phone || "", 
-        bio: ""
+        bio: "",
+        profile_pic:""
     })
     await user.save()
     .then(async (result) => {
