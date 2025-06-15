@@ -1,32 +1,27 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
-const User = new mongoose.Schema({
-    username: {
-        type: String,
-        required: true,
-        unique: true,
-        minLength: 3,
-        trim: true
-    },
-    password: {
-        type: String,
-        required: true,
-        minLength: 4,
-    },
-    name: {
-        type: String,
-        trim: true
-    },
-    profile_pic:
-    {
-        type:String,
-        trim:true
-    },
+const allowedTags = [
+  'Adventure', 'Fantasy', 'Romance', 'Science Fiction',
+  'Horror', 'Thriller', 'Non-fiction', 'Biography', 'Mystery'
+];
 
-    bio: String,
-    dob: Date,
-    email: String,
-    phone: Number,
-})
+const userSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  username: { type: String, required: true, unique: true },
+  email: { type: String, required: true, unique: true },
+  phone: { type: String, required: true },
+  location: String,
+  address: String,
+  bio: String,
+  tags: [{
+    type: String,
+    enum: allowedTags
+  }],
+  previousPurchases: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Book' }],
+  currentPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Book' }],
+  postHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Book' }],
+  requestsSent: [{ type: mongoose.Schema.Types.ObjectId, ref: 'ExchangeRequest' }],
+  requestsReceived: [{ type: mongoose.Schema.Types.ObjectId, ref: 'ExchangeRequest' }],
+}, { timestamps: true });
 
-module.exports = new mongoose.model("User", User)
+module.exports = mongoose.model('User', userSchema);
