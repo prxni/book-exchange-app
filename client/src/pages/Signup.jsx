@@ -11,23 +11,39 @@ export default function Signup() {
   const [password, setPassword] = useState("");
   const [repassword, setRepassword] = useState("");
   const [username, setUsername] = useState("");
+  const [phone, setPhone] = useState("");
 
   const signup = (evt) => {
     evt.preventDefault()
-    if(!name) setErrorMsg("name is required");
-    if(!username) setErrorMsg("Username is required");
-    //else if(usernameTaken) setErrorMsg("Username is already taken");
+    setErrorMsg(""); // Clear previous errors
+    
+    if(!name) setErrorMsg("Name is required");
+    else if(!username) setErrorMsg("Username is required");
+    else if(!email) setErrorMsg("Email is required");
+    else if(!phone) setErrorMsg("Phone is required");
     else if(!password) setErrorMsg("Password is required");
     else if(repassword!=password) setErrorMsg("Password does not match");
     else {
-        axios.post('http://localhost:3000/api/auth/signup', { username, password, name, email })
+        setIsLoading(true);
+        axios.post('http://localhost:3000/api/auth/signup', { username, password, name, email, phone })
         .then((res) => {
-            if(res.data.errorCode!=null) return;
-            document.cookie = `auth= ${res.data.accessToken};`
-            document.cookie = `token= ${res.data.refreshToken};`
+            if(res.data.errorCode!=null) {
+                setErrorMsg(res.data.message);
+                setIsLoading(false);
+                return;
+            }
+            document.cookie = `auth=${res.data.accessToken};`
+            document.cookie = `ref=${res.data.refreshToken};`
             navigate('/home')
         })
-        .catch(err => setErrorMsg(err.message))
+        .catch(err => {
+            setIsLoading(false);
+            if (err.response && err.response.data && err.response.data.message) {
+                setErrorMsg(err.response.data.message);
+            } else {
+                setErrorMsg("An error occurred. Please try again.");
+            }
+        })
     }
 }
 
@@ -42,9 +58,12 @@ export default function Signup() {
           <input type="text" className="bg-[#DED8D0] border-b-2 outline-none w-72 text-xl my-1"  onChange={(e) => setName(e.target.value)} placeholder="Name" autoFocus></input>
           <input type="text" className="bg-[#DED8D0] border-b-2 outline-none w-72 text-xl my-1"  onChange={(e) => setUsername(e.target.value)} placeholder="Username" autoFocus></input>
           <input type="text" className="bg-[#DED8D0] border-b-2 outline-none w-72 text-xl my-1"  onChange={(e) => setEmail(e.target.value)} placeholder="Email" autoFocus></input>
+          <input type="tel" className="bg-[#DED8D0] border-b-2 outline-none w-72 text-xl my-1"  onChange={(e) => setPhone(e.target.value)} placeholder="Phone" autoFocus></input>
           <input type="password"  className="bg-[#DED8D0] border-b-2 outline-none w-72 text-xl my-1" onChange={(e) => setPassword(e.target.value)} placeholder="Password"></input>
           <input type="password"  className="bg-[#DED8D0] border-b-2 outline-none w-72 text-xl my-1" onChange={(e) => setRepassword(e.target.value)} placeholder="Confirm Password"></input>
-          <button  className="mt-3 text-xl font-medium hover:bg-[#5E463B] bg-[#B2A59B] px-3 py-1 rounded-lg m-3 hover:text-[#DED8D0] border-2 text-[#3b261e]"> Signup </button>
+          <button disabled={isLoading} className="mt-3 text-xl font-medium hover:bg-[#5E463B] bg-[#B2A59B] px-3 py-1 rounded-lg m-3 hover:text-[#DED8D0] border-2 text-[#3b261e] disabled:opacity-50 disabled:cursor-not-allowed">
+            {isLoading ? 'Signing up...' : 'Signup'}
+          </button>
         </form>
       </div>
     </div>

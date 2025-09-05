@@ -7,23 +7,36 @@ const User = require('../models/user')
 const Tokens = require('../models/tokens')
 
 router.post('/signup',encrypt,async(req,res)=>{
+    // Validate required fields
+    if(!req.body.name) return res.status(400).json({ message: "Name is required" });
+    if(!req.body.email) return res.status(400).json({ message: "Email is required" });
+    if(!req.body.phone) return res.status(400).json({ message: "Phone is required" });
+    
     const user = new User({ 
         username: req.body.username, 
         password: req.body.password,
-        name: req.body.name || "", 
-        email: req.body.email || "", 
-        dob: req.body.dob || "", 
-        phone: req.body.phone || "", 
-        bio: "",
-        profile_pic:""
+        name: req.body.name, 
+        email: req.body.email, 
+        phone: req.body.phone, 
+        location: req.body.location || "",
+        address: req.body.address || "",
+        bio: req.body.bio || "",
+        tags: req.body.tags || []
     })
-    await user.save()
-    .then(async (result) => {
-        const accessToken = getAccessToken(result)
-        const refreshToken=getRefreshToken(result)
-        res.status(201).json({ accessToken,refreshToken})
-    })
-
+    
+    try {
+        const result = await user.save();
+        const accessToken = getAccessToken(result);
+        const refreshToken = getRefreshToken(result);
+        res.status(201).json({ accessToken, refreshToken });
+    } catch (error) {
+        if (error.code === 11000) {
+            // Duplicate key error
+            const field = Object.keys(error.keyPattern)[0];
+            return res.status(400).json({ message: `${field} already exists` });
+        }
+        res.status(400).json({ message: error.message });
+    }
 })
 
 router.post('/login',async(req,res)=>{

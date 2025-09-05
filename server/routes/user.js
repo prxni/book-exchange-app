@@ -20,7 +20,7 @@ router.post('/image', authenticate, uploadPhoto.single('file'), resizeAndUploadI
       return res.status(500).json({ message: "Image upload failed" });
     }
   
-    const id = res.user.id; // Corrected from res.user.id
+    const id = res.user.id; 
   
     User.findById(id)
       .then((result) => {
@@ -30,7 +30,7 @@ router.post('/image', authenticate, uploadPhoto.single('file'), resizeAndUploadI
   
         result.profile_pic = req.imageUrl;
   
-        return result.save(); // Save updated user
+        return result.save(); 
       })
       .then((updatedUser) => {
         return res.status(201).json({ 
@@ -43,6 +43,57 @@ router.post('/image', authenticate, uploadPhoto.single('file'), resizeAndUploadI
         return res.status(400).json({ message: "Failed to update user", error: err });
       });
   });
-  
-    
+
+// Get user profile
+router.get('/:id', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id)
+      .populate('currentPosts postHistory previousPurchases');
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Update user profile
+router.put('/:id', async (req, res) => {
+  try {
+    const updated = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get current posts
+router.get('/:id/posts/current', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).populate('currentPosts');
+    res.json(user.currentPosts);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get post history
+router.get('/:id/posts/history', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).populate('postHistory');
+    res.json(user.postHistory);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get purchase history
+router.get('/:id/purchases', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).populate('previousPurchases');
+    res.json(user.previousPurchases);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
+

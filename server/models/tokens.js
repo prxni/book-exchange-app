@@ -1,11 +1,11 @@
 const mongoose = require('mongoose')
 
-const Tokens = mongoose.Schema({
+const tokensSchema = new mongoose.Schema({
     token: {
         type: String,
         unique: true,
         required: true
     }
-})
+}, { timestamps: true })
 
-module.exports = new mongoose.model("Tokens", Tokens)
+module.exports = mongoose.model("Tokens", tokensSchema)

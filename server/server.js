@@ -21,6 +21,12 @@ app.use('/api/auth', authRouter)
 const userRouter = require('./routes/user')
 app.use('/api/user', userRouter)
 
+const bookRouter = require('./routes/book')
+app.use('/api/book', bookRouter)
+
+const exchangeRouter = require('./routes/exchange')
+app.use('/api/exchange', exchangeRouter)
+
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
     console.log(`Listening at ${PORT}`)
